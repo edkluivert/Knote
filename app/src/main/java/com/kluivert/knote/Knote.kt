@@ -4,12 +4,14 @@ import android.app.Application
 import android.content.Intent
 import com.kluivert.knote.di.appModule
 import com.kluivert.knote.di.viewModelModule
+import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 
 class Knote : Application() {
 
+    @InternalCoroutinesApi
     override fun onCreate() {
         super.onCreate()
 

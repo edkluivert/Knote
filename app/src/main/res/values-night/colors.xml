@@ -6,9 +6,13 @@
     <color name="colorAccent">#EF5059</color>
 
     <color name="ToolbarTxtColor">#C4C4C4</color>
-    <color name="searchBarTxtColor">#E9E9E9</color>
+    <color name="searchBarColor">#E9E9E9</color>
     <color name="txtColor">#AAAAAA</color>
     <color name="fabBakColor">#EF5059</color>
-    <color name="divColor">#C4C4C4;</color>
+    <color name="divColor">#C4C4C4</color>
+    <color name="colorSlideAct">#ef5059</color>
+    <color name="colorSlideInAct">#F47980</color>
+    <color name="edTintBak">#12AAAAAA</color>
 
+    <color name="dateColor">#E9E9E9</color>
 </resources>

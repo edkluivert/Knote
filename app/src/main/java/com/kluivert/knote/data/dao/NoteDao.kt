@@ -10,7 +10,7 @@ interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNote(note : Note)
 
-    @Query("SELECT * FROM knote_table ORDER BY date_time DESC")
+    @Query("SELECT * FROM knote_table ORDER BY id DESC")
     fun readNote() : LiveData<List<Note>>
 
     @Delete

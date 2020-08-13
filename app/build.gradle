@@ -20,6 +20,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -63,8 +68,11 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
     implementation("io.coil-kt:coil:0.11.0")
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.zhpanvip:viewpagerindicator:1.0.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
 
     //DI
     implementation "org.koin:koin-android:$koin_version"
