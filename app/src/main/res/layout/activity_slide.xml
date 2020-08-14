@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.SlideActivity">
+    tools:context=".ui.activities.SlideActivity">
 
 
     <androidx.viewpager2.widget.ViewPager2
@@ -23,14 +23,14 @@
         android:layout_margin="10dp" />
     <Button
         android:id="@+id/btnNext"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
+        android:layout_width="130dp"
+        android:layout_height="45dp"
         android:text="@string/finish"
         android:background="@drawable/button_slide_background"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimary"
-        android:layout_marginBottom="30dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="20dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

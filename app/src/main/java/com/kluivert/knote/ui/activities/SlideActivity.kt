@@ -1,9 +1,7 @@
-package com.kluivert.knote.ui
+package com.kluivert.knote.ui.activities
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +12,6 @@ import com.kluivert.knote.R
 import com.kluivert.knote.adapter.SlideAdapter
 import com.kluivert.knote.data.entities.SlideModel
 import com.kluivert.knote.databinding.ActivitySlideBinding
-import com.kluivert.knote.ui.activities.MainActivity
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
 
@@ -25,10 +22,13 @@ class SlideActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_slide)
+        slideBinding = ActivitySlideBinding.inflate(layoutInflater)
         val view = slideBinding.root
         setContentView(view)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
 
         var slideList = mutableListOf(
             SlideModel(R.drawable.slideone,"Organise your thoughts","Built specifically for you at your comfort"),
@@ -41,10 +41,10 @@ class SlideActivity : AppCompatActivity() {
 
         slideBinding.indicatorView
             .setSliderColor(R.color.colorSlideInAct,R.color.colorSlideAct)
-            .setSliderWidth(resources.getDimension(R.dimen._17sdp))
-            .setSliderHeight(resources.getDimension(R.dimen._5sdp))
+            .setSliderWidth(resources.getDimension(R.dimen._8sdp))
+            .setSliderHeight(resources.getDimension(R.dimen._8sdp))
             .setSlideMode(IndicatorSlideMode.WORM)
-            .setIndicatorStyle(IndicatorStyle.CIRCLE)
+            .setIndicatorStyle(IndicatorStyle.ROUND_RECT)
             .setupWithViewPager(slideBinding.slidePager)
 
         slideBinding.slidePager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
@@ -62,14 +62,23 @@ class SlideActivity : AppCompatActivity() {
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
 
-                if (position==2){
+
+                if (position==0){
+                    slideBinding.btnNext.visibility = View.INVISIBLE
+                }else if(position == 1){
+                    slideBinding.btnNext.visibility = View.INVISIBLE
+                } else if (position==2){
                     slideBinding.btnNext.text = getString(R.string.finish)
                     slideBinding.btnNext.visibility = View.VISIBLE
-                    Intent(this@SlideActivity,MainActivity::class.java).also {
-                        it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        startActivity(it)
-                        finish()
+
+                    slideBinding.btnNext.setOnClickListener {
+                        Intent(this@SlideActivity,MainActivity::class.java).also {
+                       it.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                       startActivity(it)
+                       finish()
+                      }
                     }
+
                   }
 
                 }

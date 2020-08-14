@@ -17,6 +17,15 @@
         android:src="@drawable/moon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+ <ImageView
+
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:src="@drawable/moon"
+       app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvAppName"
@@ -32,23 +41,13 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/imgProfile"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_height="@dimen/_40sdp"
-        app:civ_shadow_color="@color/colorAccent"
-        app:civ_shadow="true"
-        app:civ_shadow_radius="2dp"
-         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="@dimen/_30sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        tools:srcCompat="@tools:sample/avatars" />
+
 
     <LinearLayout
+        android:id="@+id/searchLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/toolbar_background"
+        android:background="@drawable/linear_grey_background"
         android:orientation="horizontal"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
@@ -71,24 +70,32 @@
 
         <EditText
             android:id="@+id/edSearchBar"
-            android:layout_width="@dimen/_260sdp"
+            android:layout_width="@dimen/_270sdp"
             android:layout_height="@dimen/_40sdp"
             android:backgroundTint="@color/edTintBak"
             android:fontFamily="@font/poppins"
-            android:hint="Enter text"
+            android:textSize="@dimen/_13ssp"
+            android:hint="@string/enter_title"
+            android:inputType="text"
+            android:textColorHint="@color/txtColor"
+            android:textColor="@color/txtColor"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:includeFontPadding="false"
             />
 
     </LinearLayout>
 
 
     <LinearLayout
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:background="@drawable/toolbar_background"
-        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/dateLayout"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:background="@drawable/linear_grey_background"
+        app:layout_constraintTop_toBottomOf="@id/searchLayout"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="170dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_10sdp"
         >
 
         <TextView
@@ -97,17 +104,17 @@
             android:layout_height="wrap_content"
             android:text="July"
             android:layout_gravity="center"
-            android:textSize="15sp"
+            android:textSize="@dimen/_12ssp"
             android:textStyle="bold"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/_10sdp"
             />
 
       <ImageView
-          android:layout_width="24dp"
-          android:layout_height="24dp"
+          android:layout_width="@dimen/_17sdp"
+          android:layout_height="@dimen/_17sdp"
           android:src="@drawable/calendar"
           android:layout_gravity="center"
-          android:layout_marginStart="30dp"
+          android:layout_marginStart="@dimen/_20sdp"
           />
 
     </LinearLayout>
@@ -115,9 +122,33 @@
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/noteRecycler"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_marginTop="230dp"
-       android:padding="30dp"
+       android:layout_height="0dp"
+       app:layout_constraintTop_toBottomOf="@id/dateLayout"
+       app:layout_constraintBottom_toBottomOf="parent"
+       android:clipToPadding="false"
+       android:layout_marginTop="@dimen/_10sdp"
+       android:layout_marginStart="@dimen/_2sdp"
+       android:layout_marginEnd="@dimen/_2sdp"
+       android:paddingStart="0dp"
+       android:paddingEnd="@dimen/_12sdp"
+       android:paddingBottom="@dimen/_12sdp"
        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddBtn"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:src="@drawable/pencil"
+        app:backgroundTint="@color/fabBakColor"
+        app:fabCustomSize="@dimen/_50sdp"
+        app:rippleColor="@color/fabBakColor"
+        app:maxImageSize="@dimen/_20sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_30sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

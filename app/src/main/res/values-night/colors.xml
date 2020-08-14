@@ -15,4 +15,5 @@
     <color name="edTintBak">#12AAAAAA</color>
 
     <color name="dateColor">#E9E9E9</color>
+    <color name="white">#000000</color>
 </resources>

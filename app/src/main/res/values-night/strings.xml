@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="finish">Finish</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="enter_contents">Enter contents</string>
 </resources>
