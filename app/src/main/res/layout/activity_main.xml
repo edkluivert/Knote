@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/mainActBak"
     tools:context=".ui.activities.MainActivity">
 
 
@@ -144,11 +144,11 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddBtn"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
         android:src="@drawable/pencil"
         app:backgroundTint="@color/fabBakColor"
-        app:fabCustomSize="@dimen/_50sdp"
+        app:fabCustomSize="@dimen/_45sdp"
         app:rippleColor="@color/fabBakColor"
         app:maxImageSize="@dimen/_20sdp"
         android:clickable="true"

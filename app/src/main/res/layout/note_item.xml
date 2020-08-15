@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
+     app:cardBackgroundColor="@color/mainActBak"
 
     >
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +14,7 @@
     android:layout_marginStart="@dimen/_10sdp"
     android:layout_marginEnd="@dimen/_10sdp"
     android:paddingBottom="@dimen/_10sdp"
+    android:background="@color/mainActBak"
     >
 
 
@@ -63,6 +64,8 @@
         android:layout_height="@dimen/_80sdp"
         android:contentDescription="@string/app_name"
         android:background="@color/colorAccent"
+        android:src="@drawable/dummypic"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="@id/tvDescItem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

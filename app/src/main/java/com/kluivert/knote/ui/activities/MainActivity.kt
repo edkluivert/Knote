@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,6 +55,37 @@ class MainActivity : AppCompatActivity() {
                 Intent(applicationContext,CreateNoteActivity::class.java),
                 ADD_NOTE_CODE
             )
+
+        }
+
+        val darkModePrefs = getSharedPreferences(getString(R.string.app_name),0)
+        val editor = darkModePrefs.edit()
+        val isNightModeOn : Boolean = darkModePrefs.getBoolean("NightMode",false)
+
+        if (isNightModeOn){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            imgTheme.setImageResource(R.drawable.sun)
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            imgTheme.setImageResource(R.drawable.moon)
+
+        }
+
+        mainBinding.imgTheme.setOnClickListener {
+
+            if (isNightModeOn){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                editor.putBoolean("NightMode",false)
+                editor.apply()
+
+                imgTheme.setImageResource(R.drawable.sun)
+            }else{
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                editor.putBoolean("NightMode",true)
+                editor.apply()
+
+                imgTheme.setImageResource(R.drawable.moon)
+            }
 
         }
 
