@@ -7,108 +7,130 @@
     android:background="@color/colorPrimary"
     tools:context=".ui.activities.CreateNoteActivity">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:layout_marginBottom="@dimen/_40sdp"
-    android:paddingBottom="@dimen/_10sdp"
-    >
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        >
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/_10sdp">
 
-      <ImageView
-          android:id="@+id/imgBtnBack"
-          android:layout_width="@dimen/_30sdp"
-          android:layout_height="@dimen/_30sdp"
-          android:layout_marginStart="@dimen/_6sdp"
-          android:layout_marginTop="@dimen/_20sdp"
-          android:contentDescription="@string/app_name"
-          android:layout_marginEnd="@dimen/_12sdp"
-          android:src="@drawable/ic_arrow_back"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          />
-
-
-    <ImageView
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_done"
-        android:background="@drawable/button_done_background"
-        app:layout_constraintTop_toTopOf="@id/imgBtnBack"
-        app:layout_constraintBottom_toBottomOf="@id/imgBtnBack"
-        android:padding="@dimen/_4sdp"
-        android:contentDescription="@string/app_name"
-        android:layout_marginEnd="@dimen/_12sdp"
-        />
-
-
-
-        <EditText
-            android:id="@+id/edTitle"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_12sdp"
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/poppins"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:includeFontPadding="false"
-            android:inputType="text"
-            android:textSize="@dimen/_16ssp"
-            app:layout_constraintTop_toBottomOf="@id/imgBtnBack"
-            android:hint="@string/enter_title"
-            android:textColor="@color/colorAccent"
-            android:textColorHint="@color/colorAccent"
-            />
-
-        <TextView
-            android:id="@+id/tvDateTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/edTitle"
-            app:layout_constraintTop_toBottomOf="@id/edTitle"
-            app:layout_constraintEnd_toEndOf="@id/edTitle"
-            android:includeFontPadding="false"
-            android:textSize="@dimen/_10ssp"
-            android:textColor="@color/txtColor"
-            />
-
-        <EditText
-            android:id="@+id/edNoteContent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
-            android:gravity="top"
-            android:hint="@string/enter_contents"
-            android:textColor="@color/txtColor"
-            android:textColorHint="@color/txtColor"
-            android:textSize="@dimen/_13ssp"
-            android:inputType="textMultiLine"
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/poppins"
-            android:includeFontPadding="false"
-            android:importantForAutofill="no"
-            android:minHeight="@dimen/_100sdp"
-            app:layout_constraintTop_toBottomOf="@id/edTitle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            android:animateLayoutChanges="true">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/imgBtnBack"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_arrow_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-</ScrollView>
+            <ImageView
+                android:id="@+id/imgDone"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:background="@drawable/button_done_background"
+                android:contentDescription="@string/app_name"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_done"
+                app:layout_constraintBottom_toBottomOf="@id/imgBtnBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/imgBtnBack" />
 
+
+            <TextView
+                android:id="@+id/tvHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:text="@string/h"
+                android:textColor="@color/txtColor"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/edTitle" />
+
+            <EditText
+                android:id="@+id/edTitle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppins"
+                android:hint="@string/enter_title"
+                android:imeOptions="actionDone"
+                android:importantForAutofill="no"
+                android:includeFontPadding="false"
+                android:inputType="text"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
+                android:textSize="@dimen/_16ssp"
+                app:layout_constraintTop_toBottomOf="@id/imgBtnBack" />
+
+            <TextView
+                android:id="@+id/tvDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:includeFontPadding="false"
+                android:text="@string/dateString"
+                android:textColor="@color/dateColor"
+                android:textSize="@dimen/_11ssp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvPara"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:text="@string/p"
+                android:textColor="@color/txtColor"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/edNoteContent" />
+
+            <EditText
+                android:id="@+id/edNoteContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppins"
+                android:gravity="top"
+                android:hint="@string/enter_contents"
+                android:importantForAutofill="no"
+                android:includeFontPadding="false"
+                android:inputType="textMultiLine"
+                android:minHeight="@dimen/_100sdp"
+                android:textColor="@color/txtColor"
+                android:textColorHint="@color/txtColor"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+    <include layout="@layout/layout_note_editor"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

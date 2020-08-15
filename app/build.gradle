@@ -73,6 +73,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
 
     //DI
     implementation "org.koin:koin-android:$koin_version"
