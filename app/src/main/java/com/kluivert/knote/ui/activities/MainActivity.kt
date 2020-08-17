@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity() {
 
         noteViewModel.readNote.observe(this, Observer {
             adapter.asynDif.submitList(it)
+            adapter.setData(it,-1)
         })
 
 

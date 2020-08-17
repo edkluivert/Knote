@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.Coil
 import coil.api.load
 import coil.request.LoadRequest
+import com.bumptech.glide.Glide
 import com.kluivert.knote.R
 import com.kluivert.knote.data.entities.Note
 import kotlinx.android.synthetic.main.note_item.view.*
+import java.io.File
 
 
 class NoteAdapter(
@@ -63,8 +65,15 @@ class NoteAdapter(
         holder.itemView.apply {
             val current = asynDif.currentList[position]
             tvTitleItem.text = current.noteTitle
+            tvTitleItem.setTextColor(current.color)
             tvDescItem.text = current.noteContent
-            imgContentItem.load(current.noteImage)
+
+            if (current.noteImage.isBlank()){
+                imgContentItem.visibility = View.GONE
+            }
+
+          imgContentItem.load(File(current.noteImage))
+            imgContentItem.visibility = View.VISIBLE
 
              tvOptionMore.setOnClickListener {
 
@@ -94,6 +103,11 @@ class NoteAdapter(
         }
 
 
+    }
+
+    fun setData(noteModel : List<Note>, pos : Int){
+        this.noteList = noteModel
+        notifyItemInserted(pos)
     }
 
 

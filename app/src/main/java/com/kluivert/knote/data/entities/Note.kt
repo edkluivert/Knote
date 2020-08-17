@@ -3,6 +3,7 @@ package com.kluivert.knote.data.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "knote_table")
 data class Note(
@@ -22,9 +23,9 @@ data class Note(
     val webLink : String,
 
     @ColumnInfo(name = "color")
-    val color : String,
+    val color : Int,
 
     @ColumnInfo(name = "date_time")
     val dateTime : String
 
-)
+):Serializable

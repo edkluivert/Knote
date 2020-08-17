@@ -49,7 +49,7 @@
     <TextView
         android:id="@+id/tvDescItem"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textColor="@color/txtColor"
         android:textSize="@dimen/_12ssp"
@@ -61,10 +61,10 @@
     <ImageView
         android:id="@+id/imgContentItem"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_80sdp"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:background="@color/colorAccent"
         android:src="@drawable/dummypic"
+        android:visibility="gone"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="@id/tvDescItem"
         app:layout_constraintStart_toStartOf="parent"

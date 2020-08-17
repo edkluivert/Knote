@@ -104,6 +104,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/edNoteContent" />
 
+
+            <ImageView
+                android:id="@+id/imgNote"
+                android:contentDescription="@string/app_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:adjustViewBounds="true"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/edTitle"
+                />
+
             <EditText
                 android:id="@+id/edNoteContent"
                 android:layout_width="match_parent"
@@ -124,7 +138,7 @@
                 android:textColorHint="@color/txtColor"
                 android:textSize="@dimen/_13ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edTitle" />
+                app:layout_constraintTop_toBottomOf="@id/imgNote" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
