@@ -14,13 +14,16 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -32,6 +35,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.toColor
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kluivert.knote.R
@@ -43,6 +47,7 @@ import kotlinx.android.synthetic.main.activity_create_note.*
 import kotlinx.android.synthetic.main.color_layout.*
 import kotlinx.android.synthetic.main.color_layout.view.*
 import kotlinx.android.synthetic.main.color_layout.view.colorDefault
+import kotlinx.android.synthetic.main.layout_web.view.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
@@ -51,6 +56,7 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.jar.Manifest
+import java.util.regex.Pattern
 
 @InternalCoroutinesApi
 class CreateNoteActivity : AppCompatActivity() {
@@ -63,8 +69,12 @@ class CreateNoteActivity : AppCompatActivity() {
  private var REQUEST_IMAGE_CODE_PERMISSION = 1
     private var REQUEST_CODE_SELECT_IMAGE = 2
     private var selectedImagePath : String = ""
+    private var strurl : String = ""
 
     private val noteViewModel by inject<NoteViewModel>()
+
+    private var alreadyAvailable : Note? = null
+
 
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.M)
@@ -90,6 +100,11 @@ class CreateNoteActivity : AppCompatActivity() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
 
+        if (intent.getBooleanExtra("isViewOrUpdate",false)){
+            alreadyAvailable = intent.getSerializableExtra("knote") as Note?
+            viewOrUpdate()
+        }
+
         createNoteBinding.imgBtnBack.setOnClickListener {
             onBackPressed()
         }
@@ -105,8 +120,16 @@ class CreateNoteActivity : AppCompatActivity() {
 
 
 
+                if (createNoteBinding.linlayoutWeb.visibility == View.VISIBLE){
+                    createNoteBinding.tvUrl.text = strurl
+                }
 
-            val note = Note(0,title,message,selectedImagePath,"",selectedColor,tvDateTime.text.toString())
+            val note = Note(0,title,message,selectedImagePath,strurl,selectedColor,tvDateTime.text.toString())
+
+            if (alreadyAvailable != null){
+                    note.id = alreadyAvailable!!.id
+            }
+
             if (inputChecker(title,message)){
 
               noteViewModel.addNote(note)
@@ -123,6 +146,26 @@ class CreateNoteActivity : AppCompatActivity() {
             }
         }
 
+
+    }
+
+    private fun viewOrUpdate(){
+
+    createNoteBinding.edTitle.setText(alreadyAvailable!!.noteTitle)
+    createNoteBinding.edNoteContent.setText(alreadyAvailable!!.noteContent)
+     createNoteBinding.tvUrl.setText(alreadyAvailable!!.webLink)
+    createNoteBinding.tvDateTime.setText(alreadyAvailable!!.dateTime)
+        if (!alreadyAvailable!!.noteImage.trim().isEmpty()){
+              createNoteBinding.imgNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailable!!.noteImage))
+               createNoteBinding.imgNote.visibility = View.VISIBLE
+               selectedImagePath = alreadyAvailable!!.noteImage
+        }
+
+        if (!alreadyAvailable!!.webLink.trim().isEmpty()){
+            createNoteBinding.tvUrl.text = alreadyAvailable!!.webLink
+            createNoteBinding.linlayoutWeb.visibility = View.VISIBLE
+
+        }
 
     }
 
@@ -212,6 +255,19 @@ class CreateNoteActivity : AppCompatActivity() {
        }
 
 
+       if (alreadyAvailable != null && alreadyAvailable!!.color.equals(0) && !alreadyAvailable!!.color.equals(0) ){
+
+           when(alreadyAvailable!!.color){
+               R.color.blue -> {cardLayout.findViewById<View>(R.id.viewColor1).performClick()
+
+               }
+               R.color.yellow -> {cardLayout.findViewById<View>(R.id.viewColor2).performClick()}
+              R.color.green -> {cardLayout.findViewById<View>(R.id.viewColor3).performClick()}
+              R.color.pink -> {cardLayout.findViewById<View>(R.id.viewColor4).performClick()}
+           }
+
+
+       }
 
        cardLayout.findViewById<ImageView>(R.id.imgInsert).setOnClickListener {
 
@@ -226,11 +282,52 @@ class CreateNoteActivity : AppCompatActivity() {
                pickImage()
            }
 
+
+
+
+       }
+
+       cardLayout.findViewById<ImageView>(R.id.imgLink).setOnClickListener {
+           bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+           val mDialogView = LayoutInflater.from(this).inflate(R.layout.layout_web, null)
+
+           val mBuilder = AlertDialog.Builder(this)
+               .setView(mDialogView)
+           val  mAlertDialog = mBuilder.show()
+
+           mDialogView.tvAddLink.setOnClickListener {
+               val url = mDialogView.findViewById<EditText>(R.id.edWeb)
+                      url.requestFocus()
+               if (url.text.toString().trim().isEmpty()){
+                   Toasty.warning(this,"Please enter url",Toast.LENGTH_SHORT,true).show()
+               }else if(!Patterns.WEB_URL.matcher(url.text.toString()).matches()){
+                   Toasty.warning(this,"Please enter  correct url",Toast.LENGTH_SHORT,true).show()
+               }else{
+                   strurl = url.text.toString()
+                   createNoteBinding.tvUrl.text = strurl
+                   createNoteBinding.linlayoutWeb.visibility = View.VISIBLE
+                   mAlertDialog.dismiss()
+               }
+
+
+
+
+
+           }
+           //cancel button click of custom layout
+           mDialogView.tvCancel.setOnClickListener {
+
+               mAlertDialog.dismiss()
+           }
+
        }
 
 
 
     }
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.M)

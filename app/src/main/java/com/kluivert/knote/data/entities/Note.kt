@@ -8,7 +8,7 @@ import java.io.Serializable
 @Entity(tableName = "knote_table")
 data class Note(
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
+    var id : Int,
 
     @ColumnInfo(name = "title")
     val noteTitle : String,

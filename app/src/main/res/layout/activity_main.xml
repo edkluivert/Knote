@@ -8,6 +8,43 @@
     tools:context=".ui.activities.MainActivity">
 
 
+    <LinearLayout
+        android:id="@+id/emptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateLayout"
+        android:background="@color/mainActBak"
+        android:orientation="vertical"
+       android:layout_marginTop="@dimen/_60sdp"
+         android:visibility="gone"
+
+        >
+
+        <ImageView
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/product"
+            android:contentDescription="@string/app_name"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No lists yet"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_20sdp"
+
+            />
+
+
+    </LinearLayout>
+
+
     <ImageView
         android:id="@+id/imgTheme"
         android:layout_width="@dimen/_30sdp"

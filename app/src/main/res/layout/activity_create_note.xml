@@ -72,11 +72,37 @@
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
-                android:inputType="text"
+                android:inputType="textMultiLine"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="@color/colorAccent"
                 android:textSize="@dimen/_16ssp"
                 app:layout_constraintTop_toBottomOf="@id/imgBtnBack" />
+
+            <LinearLayout
+                android:id="@+id/linlayoutWeb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                app:layout_constraintTop_toBottomOf="@id/imgNote"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    android:id="@+id/tvUrl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:autoLink="web"
+                    android:textSize="@dimen/_13ssp"
+                    />
+
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvDateTime"
@@ -138,7 +164,7 @@
                 android:textColorHint="@color/txtColor"
                 android:textSize="@dimen/_13ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imgNote" />
+                app:layout_constraintTop_toBottomOf="@id/linlayoutWeb" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

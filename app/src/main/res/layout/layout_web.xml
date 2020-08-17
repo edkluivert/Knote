@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_10sdp"
+    android:background="@drawable/linear_grey_background"
+
+    >
+
+  <ImageView
+      android:id="@+id/imgWeb"
+      android:layout_width="@dimen/_25sdp"
+      android:layout_height="@dimen/_25sdp"
+      android:src="@drawable/web"
+      android:layout_marginStart="@dimen/_8sdp"
+      android:layout_marginTop="@dimen/_8sdp"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      android:contentDescription="@string/app_name"
+      />
+
+    
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:includeFontPadding="false"
+        android:text="@string/add_url"
+        android:textSize="@dimen/_14sdp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/imgWeb"
+        app:layout_constraintStart_toEndOf="@id/imgWeb"
+        app:layout_constraintTop_toTopOf="@id/imgWeb"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    
+    <EditText
+        android:id="@+id/edWeb"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:importantForAutofill="no"
+        android:imeOptions="actionDone"
+        android:fontFamily="@font/poppins"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:textColor="@color/txtColor"
+        android:includeFontPadding="false"
+        android:inputType="textUri"
+        android:hint="@string/enterurl"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/imgWeb"
+        android:backgroundTint="@color/edTintBak"
+        />
+
+    <TextView
+        android:id="@+id/tvAddLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:text="@string/add_link"
+        android:textColor="@color/colorAccent"
+         android:padding="@dimen/_8sdp"
+         android:includeFontPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/edWeb"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:includeFontPadding="false"
+        android:text="@string/cancel"
+        app:layout_constraintTop_toBottomOf="@id/edWeb"
+        app:layout_constraintEnd_toStartOf="@id/tvAddLink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/colorAccent"
+        android:padding="@dimen/_8sdp"
+        android:textSize="@dimen/_13ssp"
+
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
