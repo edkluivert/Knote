@@ -30,7 +30,7 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 
 
 ### Architecture 
-* [Mvvm] 
+* Mvvm
 
 
  
