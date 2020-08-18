@@ -42,7 +42,8 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
  
  
 
- The intro slides
+ 
+ 
  
  ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/slideone.png)
  
@@ -51,11 +52,13 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
  ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/slidethree.png)
  
  
- Empty screen 
+ 
+ 
+ 
   ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/mainemptyscreen.png)
  
  
-  Note list
+  
  
  ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/notelistday.png)
  
