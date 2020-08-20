@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,10 +18,14 @@ import com.kluivert.knote.adapter.NoteAdapter
 import com.kluivert.knote.data.entities.Note
 import com.kluivert.knote.data.viewModel.NoteViewModel
 import com.kluivert.knote.databinding.ActivityMainBinding
-import com.kluivert.knote.utils.*
+import com.kluivert.knote.utils.DividerItemDecoration
+import com.kluivert.knote.utils.KnoteListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @InternalCoroutinesApi
@@ -35,6 +42,7 @@ class MainActivity : AppCompatActivity(), KnoteListener {
     var notelist: MutableList<Note> = mutableListOf()
     private var noteClicked : Int = -1
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ResourceType")
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +71,7 @@ class MainActivity : AppCompatActivity(), KnoteListener {
         if (isNightModeOn){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             imgTheme.setImageResource(R.drawable.sun)
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             imgTheme.setImageResource(R.drawable.moon)
@@ -75,7 +84,7 @@ class MainActivity : AppCompatActivity(), KnoteListener {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 editor.putBoolean("NightMode",false)
                 editor.apply()
-
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
                 imgTheme.setImageResource(R.drawable.sun)
             }else{
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -103,8 +112,35 @@ class MainActivity : AppCompatActivity(), KnoteListener {
         })
         mainBinding.noteRecycler.smoothScrollToPosition(0)
 
+        mainBinding.edSearchBar.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                filter(p0.toString())
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+        })
+
+        val monthName = arrayOf(
+            "January", "February",
+            "March", "April", "May", "June", "July",
+            "August", "September", "October", "November",
+            "December"
+        )
+        val cal = Calendar.getInstance()
+        val month = monthName[cal[Calendar.MONTH]]
+
+        mainBinding.tvMonth.setText(month)
+
 
     }
+
+
 
     @InternalCoroutinesApi
     override fun listener(note: Note, position: Int) {
@@ -117,5 +153,37 @@ class MainActivity : AppCompatActivity(), KnoteListener {
         }
     }
 
+    @InternalCoroutinesApi
+    override suspend fun deleteListener(note: Note, position: Int) {
+        noteViewModel.deleteNote(note)
+    }
 
+    fun filter(text: String) {
+
+        val filteredCourseAry: ArrayList<Note> = ArrayList()
+
+        val noteSearch : MutableList<Note> = notelist
+
+        for (eachNote in noteSearch) {
+            if (eachNote.noteTitle.toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT)) || eachNote.noteContent.toLowerCase(
+                    Locale.ROOT
+                ).contains(text.toLowerCase(
+                    Locale.ROOT
+                )
+                )
+                || eachNote.noteContent.toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT)) || eachNote.noteContent.toLowerCase(
+                    Locale.ROOT
+                ).contains(text.toLowerCase(
+                    Locale.ROOT
+                )
+                )  ) {
+                filteredCourseAry.add(eachNote)
+            }
+        }
+
+
+        adapter.filterList(filteredCourseAry);
+    }
 }
+
+

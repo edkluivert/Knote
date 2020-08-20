@@ -23,7 +23,7 @@ data class Note(
     val webLink : String,
 
     @ColumnInfo(name = "color")
-    val color : Int,
+    val color : String,
 
     @ColumnInfo(name = "date_time")
     val dateTime : String

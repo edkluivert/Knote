@@ -30,6 +30,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -44,6 +45,7 @@ import com.kluivert.knote.data.viewModel.NoteViewModel
 import com.kluivert.knote.databinding.ActivityCreateNoteBinding
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_create_note.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.color_layout.*
 import kotlinx.android.synthetic.main.color_layout.view.*
 import kotlinx.android.synthetic.main.color_layout.view.colorDefault
@@ -65,7 +67,7 @@ class CreateNoteActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private var selectedColor : Int = R.color.colorAccent
+    private var selectedColor : String = "#ef5059"
  private var REQUEST_IMAGE_CODE_PERMISSION = 1
     private var REQUEST_CODE_SELECT_IMAGE = 2
     private var selectedImagePath : String = ""
@@ -85,7 +87,18 @@ class CreateNoteActivity : AppCompatActivity() {
         setContentView(createview)
 
 
+        val darkModePrefs = getSharedPreferences(getString(R.string.app_name),0)
+        val editor = darkModePrefs.edit()
+        val isNightModeOn : Boolean = darkModePrefs.getBoolean("NightMode",false)
 
+        if (isNightModeOn){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+
+        }
 
         createNoteBinding.layoutList.findViewById<ConstraintLayout>(R.id.layoutList)
 
@@ -109,8 +122,10 @@ class CreateNoteActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-         selectedColor = getColor(R.color.colorAccent)
-         createNoteBinding.edTitle.setTextColor(selectedColor)
+
+
+
+
 
 
         createNoteBinding.imgDone.setOnClickListener {
@@ -153,19 +168,25 @@ class CreateNoteActivity : AppCompatActivity() {
 
     createNoteBinding.edTitle.setText(alreadyAvailable!!.noteTitle)
     createNoteBinding.edNoteContent.setText(alreadyAvailable!!.noteContent)
-     createNoteBinding.tvUrl.setText(alreadyAvailable!!.webLink)
-    createNoteBinding.tvDateTime.setText(alreadyAvailable!!.dateTime)
-        if (!alreadyAvailable!!.noteImage.trim().isEmpty()){
+        createNoteBinding.tvUrl.text = alreadyAvailable!!.webLink
+        createNoteBinding.tvDateTime.text = alreadyAvailable!!.dateTime
+        createNoteBinding.edTitle.setTextColor(Color.parseColor(alreadyAvailable!!.color))
+
+
+        if (alreadyAvailable!!.noteImage.trim().isNotEmpty()){
               createNoteBinding.imgNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailable!!.noteImage))
                createNoteBinding.imgNote.visibility = View.VISIBLE
                selectedImagePath = alreadyAvailable!!.noteImage
         }
 
-        if (!alreadyAvailable!!.webLink.trim().isEmpty()){
+        if (alreadyAvailable!!.webLink.trim().isNotEmpty()){
             createNoteBinding.tvUrl.text = alreadyAvailable!!.webLink
             createNoteBinding.linlayoutWeb.visibility = View.VISIBLE
 
         }
+
+
+
 
     }
 
@@ -195,8 +216,8 @@ class CreateNoteActivity : AppCompatActivity() {
        val imageColor4 =  cardLayout.findViewById<ImageView>(R.id.colorPink)
 
        cardLayout.findViewById<View>(R.id.viewColor).setOnClickListener {
-           selectedColor = getColor(R.color.colorAccent)
-          createNoteBinding.edTitle.setTextColor(selectedColor)
+           selectedColor = "#ef5059"
+          createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
            imageColor.setImageResource(R.drawable.tintdone)
            imageColor1.setImageResource(0)
            imageColor2.setImageResource(0)
@@ -207,8 +228,8 @@ class CreateNoteActivity : AppCompatActivity() {
        }
 
        cardLayout.findViewById<View>(R.id.viewColor1).setOnClickListener {
-           selectedColor = getColor(R.color.blue)
-           createNoteBinding.edTitle.setTextColor(selectedColor)
+           selectedColor = "#2196F3"
+           createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
            imageColor1.setImageResource(R.drawable.tintdone)
            imageColor.setImageResource(0)
            imageColor2.setImageResource(0)
@@ -219,8 +240,8 @@ class CreateNoteActivity : AppCompatActivity() {
        }
 
        cardLayout.findViewById<View>(R.id.viewColor2).setOnClickListener {
-           selectedColor = getColor(R.color.yellow)
-           createNoteBinding.edTitle.setTextColor(selectedColor)
+           selectedColor = "#FFC107"
+           createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
            imageColor2.setImageResource(R.drawable.tintdone)
            imageColor1.setImageResource(0)
            imageColor.setImageResource(0)
@@ -231,8 +252,8 @@ class CreateNoteActivity : AppCompatActivity() {
        }
 
        cardLayout.findViewById<View>(R.id.viewColor3).setOnClickListener {
-           selectedColor = getColor(R.color.green)
-           createNoteBinding.edTitle.setTextColor(selectedColor)
+           selectedColor = "#4CAF50"
+           createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
            imageColor3.setImageResource(R.drawable.tintdone)
            imageColor1.setImageResource(0)
            imageColor2.setImageResource(0)
@@ -243,8 +264,8 @@ class CreateNoteActivity : AppCompatActivity() {
        }
 
        cardLayout.findViewById<View>(R.id.viewColor4).setOnClickListener {
-           selectedColor = getColor(R.color.pink)
-           createNoteBinding.edTitle.setTextColor(selectedColor)
+           selectedColor = "#E91E63"
+           createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
            imageColor4.setImageResource(R.drawable.tintdone)
            imageColor.setImageResource(0)
            imageColor1.setImageResource(0)
@@ -255,15 +276,11 @@ class CreateNoteActivity : AppCompatActivity() {
        }
 
 
-       if (alreadyAvailable != null && alreadyAvailable!!.color.equals(0) && !alreadyAvailable!!.color.equals(0) ){
+       if (alreadyAvailable != null && alreadyAvailable!!.color.trim().isNotEmpty()){
 
-           when(alreadyAvailable!!.color){
-               R.color.blue -> {cardLayout.findViewById<View>(R.id.viewColor1).performClick()
-
-               }
-               R.color.yellow -> {cardLayout.findViewById<View>(R.id.viewColor2).performClick()}
-              R.color.green -> {cardLayout.findViewById<View>(R.id.viewColor3).performClick()}
-              R.color.pink -> {cardLayout.findViewById<View>(R.id.viewColor4).performClick()}
+           val sel = "#2196F3"
+           if (Color.parseColor(alreadyAvailable!!.color).toString() == sel){
+               cardLayout.findViewById<View>(R.id.viewColor1).performClick()
            }
 
 

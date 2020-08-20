@@ -1,13 +1,18 @@
 package com.kluivert.knote.adapter
 
+import android.graphics.Color
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.os.HandlerCompat.postDelayed
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
+import com.google.android.gms.tasks.Task
 import com.kluivert.knote.R
 import com.kluivert.knote.data.entities.Note
 import com.kluivert.knote.data.viewModel.NoteViewModel
@@ -16,21 +21,26 @@ import com.kluivert.knote.ui.activities.MainActivity
 import com.kluivert.knote.utils.KnoteDiffUtil
 import com.kluivert.knote.utils.KnoteListener
 import kotlinx.android.synthetic.main.note_item.view.*
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.java.KoinJavaComponent.inject
 import java.io.File
+import java.sql.Time
+import java.util.*
+import java.util.logging.Handler
+import kotlin.collections.ArrayList
 import kotlin.coroutines.coroutineContext
 
 
 class NoteAdapter(
 
     var noteList: MutableList<Note> = mutableListOf(),
-    var listener: KnoteListener
-
+    var listener: KnoteListener,
+    var noteSource: MutableList<Note> = mutableListOf()
 
 ) : RecyclerView.Adapter<NoteAdapter.NoteAdapterViewHolder>() {
-
 
 
     fun updateListItems(newList: MutableList<Note>) {
@@ -64,7 +74,7 @@ class NoteAdapter(
         holder.itemView.apply {
             val current = noteList[position]
             tvTitleItem.text = current.noteTitle
-            tvTitleItem.setTextColor(current.color)
+            tvTitleItem.setTextColor(Color.parseColor(current.color))
             tvDescItem.text = current.noteContent
 
             if (current.noteImage.isBlank()){
@@ -83,7 +93,7 @@ class NoteAdapter(
                          R.id.miEdit ->
                              Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
                          R.id.miDelete ->
-                             Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
+                             GlobalScope.launch {  listener.deleteListener(noteList[position],position)}
                          R.id.miShare ->
                              Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
                      }
@@ -108,7 +118,10 @@ class NoteAdapter(
     }
 
 
-
+    fun filterList(filteredCourseList: ArrayList<Note>) {
+        this.noteList = filteredCourseList
+        notifyDataSetChanged();
+    }
 
     fun setData(noteModel : MutableList<Note>, pos : Int){
         this.noteList = noteModel
@@ -120,6 +133,35 @@ class NoteAdapter(
     fun setOnItemClickListener(listener : (Note) ->Unit){
         onClickItemListener = listener
     }
+
+    /*fun deleteNote( search : String){
+         val timer : Timer
+
+      timer = object  : Timer() {
+         fun run() {
+              if (search.trim().isEmpty()){
+                  noteList = noteSource
+              }else {
+                  val temp: ArrayList<Note> = arrayListOf()
+
+                  for (i in temp) {
+                      if (i.noteTitle.toLowerCase(Locale.ROOT)
+                              .contains(search.toLowerCase(Locale.ROOT)) ||
+                          i.noteContent.toLowerCase(Locale.ROOT)
+                              .contains(search.toLowerCase(Locale.ROOT))
+                      ) {
+                          temp.add(i)
+
+                      }
+                  }
+                  noteList = temp
+              }
+
+          }
+
+      }
+
+    }*/
 
 
 
