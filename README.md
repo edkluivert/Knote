@@ -35,46 +35,19 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 * Mvvm
 
 
- 
- 
- 
- Here is a screenshot of the app so far
- 
- # Day mode
- 
- 
 
- 
- 
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/slideone.png)
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/slidetwo.png)
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/slidethree.png)
- 
- 
- 
- 
- 
-  ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/mainemptyscreen.png)
- 
- 
-  
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/notelistday.png)
- 
- Note creation
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/editnoteday.png)
- 
- # Night mode
- 
- 
-![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/notelistnight.png)
+<img align="center" src="./screenshots/slideone.png" width="240"> | <img align="center" src="./screenshots/slidetwo.png" width="240"> | <img align="center" src="./screenshots/slidethree.png" width="240"> | <img align="center" src="./resources/mainemptyscreen.png" width="240">
 
-![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/editnotenight.png)
+<h3 align="center">⚪⚫ Light and Dark themes</h3></br>
 
+<p align="center">
+<img align="center" src="./screenshots/notelistday.png" width="240"> 
+<img align="center" src="./screenshots/notelistnight.png" width="240">
+</p>
+ 
+ 
+ 
+ 
 
 
 ### Todos
