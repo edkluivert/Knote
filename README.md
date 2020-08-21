@@ -27,6 +27,8 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 - LiveData
 - Google mobile vision
 - Google text to speech
+- Koin
+- Coroutines
 
 
 ### Architecture 
@@ -72,7 +74,6 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/notelistnight.png)
 
 ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/editnotenight.png)
-
 
 
 
