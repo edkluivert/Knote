@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -20,6 +21,7 @@ import com.kluivert.knote.data.viewModel.NoteViewModel
 import com.kluivert.knote.databinding.ActivityMainBinding
 import com.kluivert.knote.utils.DividerItemDecoration
 import com.kluivert.knote.utils.KnoteListener
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
@@ -62,6 +64,11 @@ class MainActivity : AppCompatActivity(), KnoteListener {
                 ADD_NOTE_CODE
             )
 
+        }
+
+        mainBinding.imgProfile.setOnClickListener {
+            Toasty.success(this,"Developer will work on this feature soon",
+                Toast.LENGTH_SHORT,true).show()
         }
 
         val darkModePrefs = getSharedPreferences(getString(R.string.app_name),0)
@@ -145,6 +152,16 @@ class MainActivity : AppCompatActivity(), KnoteListener {
     @InternalCoroutinesApi
     override fun listener(note: Note, position: Int) {
 
+        noteClicked = position
+        Intent(applicationContext,CreateNoteActivity::class.java).also {
+            it.putExtra("isViewOrUpdate",true)
+            it.putExtra("knote",note)
+            startActivityForResult(it, UPDATE_NOTE_CODE)
+        }
+    }
+
+    @InternalCoroutinesApi
+    override fun editlistener(note: Note, position: Int) {
         noteClicked = position
         Intent(applicationContext,CreateNoteActivity::class.java).also {
             it.putExtra("isViewOrUpdate",true)

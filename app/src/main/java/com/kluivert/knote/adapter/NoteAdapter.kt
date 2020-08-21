@@ -20,6 +20,7 @@ import com.kluivert.knote.databinding.NoteItemBinding
 import com.kluivert.knote.ui.activities.MainActivity
 import com.kluivert.knote.utils.KnoteDiffUtil
 import com.kluivert.knote.utils.KnoteListener
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.note_item.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -90,12 +91,14 @@ class NoteAdapter(
                  popupMenu.menuInflater.inflate(R.menu.note_item_menu,popupMenu.menu)
                  popupMenu.setOnMenuItemClickListener { item ->
                      when(item.itemId) {
-                         R.id.miEdit ->
-                             Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
+                         R.id.miEdit ->  listener.editlistener(
+                             noteList[position],position
+                         )
+
                          R.id.miDelete ->
                              GlobalScope.launch {  listener.deleteListener(noteList[position],position)}
                          R.id.miShare ->
-                             Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
+                          Toasty.success(context,"Developer will work on this feature soon",Toast.LENGTH_SHORT,true).show()
                      }
                      true
                  }

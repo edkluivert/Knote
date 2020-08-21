@@ -125,7 +125,17 @@ class CreateNoteActivity : AppCompatActivity() {
 
 
 
+    createNoteBinding.imgRemoveWeb.setOnClickListener {
+        createNoteBinding.tvUrl.text = null
+        createNoteBinding.linlayoutWeb.visibility = View.GONE
+    }
 
+        createNoteBinding.imgRemoveImage.setOnClickListener {
+            createNoteBinding.imgNote.setImageBitmap(null)
+            createNoteBinding.imgNote.visibility = View.GONE
+            createNoteBinding.imgRemoveImage.visibility = View.GONE
+            selectedImagePath = ""
+        }
 
 
         createNoteBinding.imgDone.setOnClickListener {
@@ -177,6 +187,7 @@ class CreateNoteActivity : AppCompatActivity() {
               createNoteBinding.imgNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailable!!.noteImage))
                createNoteBinding.imgNote.visibility = View.VISIBLE
                selectedImagePath = alreadyAvailable!!.noteImage
+               createNoteBinding.imgRemoveImage.visibility = View.VISIBLE
         }
 
         if (alreadyAvailable!!.webLink.trim().isNotEmpty()){
@@ -184,6 +195,8 @@ class CreateNoteActivity : AppCompatActivity() {
             createNoteBinding.linlayoutWeb.visibility = View.VISIBLE
 
         }
+
+
 
 
 
@@ -286,6 +299,7 @@ class CreateNoteActivity : AppCompatActivity() {
 
        }
 
+
        cardLayout.findViewById<ImageView>(R.id.imgInsert).setOnClickListener {
 
            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -379,6 +393,7 @@ class CreateNoteActivity : AppCompatActivity() {
                          createNoteBinding.imgNote.setImageBitmap(bitmap)
                         createNoteBinding.imgNote.visibility = View.VISIBLE
                         selectedImagePath = getImagePath(imageuri)
+                        createNoteBinding.imgRemoveImage.visibility = View.VISIBLE
 
                     }catch (exception : Exception){
                          val message = exception.message.toString()
