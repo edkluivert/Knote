@@ -36,13 +36,14 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 
 
 
-<img align="center" src="./screenshots/slideone.png" width="240"> | <img align="center" src="./screenshots/slidetwo.png" width="240"> | <img align="center" src="./screenshots/slidethree.png" width="240"> | <img align="center" src="./resources/mainemptyscreen.png" width="240">
+<img align="center" src="./screenshots/slideone.png" width="240"> | <img align="center" src="./screenshots/slidetwo.png" width="240"> | <img align="center" src="./screenshots/slidethree.png" width="240"> | <img align="center" src="./screenshots/mainemptyscreen.png" width="240">
 
 <h3 align="center">⚪⚫ Light and Dark themes</h3></br>
 
 <p align="center">
+
 <img align="center" src="./screenshots/notelistday.png" width="240"> 
-<img align="center" src="./screenshots/notelistnight.png" width="240">
+<img align="center" src="./screenshots/notelistnight.png" width="240"> 
 </p>
  
  
