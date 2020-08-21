@@ -64,6 +64,7 @@
         android:layout_marginEnd="@dimen/_30sdp"
         android:layout_marginTop="@dimen/_20sdp"
         android:src="@drawable/profilepic"
+        android:contentDescription="@string/app_name"
         app:civ_border="false"
         app:civ_shadow_radius="2dp"
         app:civ_shadow_color="@color/colorAccent"

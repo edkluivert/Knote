@@ -89,7 +89,7 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:visibility="gone"
-                >
+                tools:ignore="UseCompoundDrawables">
 
                 <TextView
                     android:id="@+id/tvUrl"
