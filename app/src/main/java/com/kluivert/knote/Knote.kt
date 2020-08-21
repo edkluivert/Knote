@@ -1,7 +1,6 @@
 package com.kluivert.knote
 
 import android.app.Application
-import android.content.Intent
 import com.kluivert.knote.di.appModule
 import com.kluivert.knote.di.viewModelModule
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -19,6 +18,8 @@ class Knote : Application() {
             androidContext(this@Knote)
             modules(listOf(appModule, viewModelModule))
         }
+
+
     }
 
 }

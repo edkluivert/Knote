@@ -113,6 +113,17 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/imgNoteSearch"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:src="@drawable/ic_delete"
+                android:contentDescription="@string/app_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="gone"
+                />
+
             <TextView
                 android:id="@+id/tvDateTime"
                 android:layout_width="wrap_content"
@@ -161,7 +172,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/background_delete"
                 android:padding="@dimen/_4sdp"
-                app:tint="@color/white"
+                app:tint="@color/deleteColortint"
                 android:src="@drawable/ic_delete"
                 app:layout_constraintTop_toTopOf="@id/imgNote"
                 app:layout_constraintEnd_toEndOf="@id/imgNote"

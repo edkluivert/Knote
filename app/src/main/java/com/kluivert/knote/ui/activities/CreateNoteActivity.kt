@@ -13,6 +13,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.GradientDrawable
 import android.media.Image
 import android.net.Uri
@@ -38,6 +39,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.graphics.toColor
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.vision.Frame
+import com.google.android.gms.vision.text.TextRecognizer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kluivert.knote.R
 import com.kluivert.knote.data.entities.Note
@@ -67,18 +70,19 @@ class CreateNoteActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private var selectedColor : String = "#ef5059"
- private var REQUEST_IMAGE_CODE_PERMISSION = 1
+    private var selectedColor: String = "#ef5059"
+    private var REQUEST_IMAGE_CODE_PERMISSION = 1
     private var REQUEST_CODE_SELECT_IMAGE = 2
-    private var selectedImagePath : String = ""
-    private var strurl : String = ""
+    private var REQUEST_CODE_SELECT_IMAGE_SEARCH = 3
+    private var selectedImagePath: String = ""
+    private var strurl: String = ""
 
     private val noteViewModel by inject<NoteViewModel>()
 
-    private var alreadyAvailable : Note? = null
+    private var alreadyAvailable: Note? = null
 
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "CommitPrefEdits")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,14 +91,15 @@ class CreateNoteActivity : AppCompatActivity() {
         setContentView(createview)
 
 
-        val darkModePrefs = getSharedPreferences(getString(R.string.app_name),0)
+        val darkModePrefs = getSharedPreferences(getString(R.string.app_name), 0)
         val editor = darkModePrefs.edit()
-        val isNightModeOn : Boolean = darkModePrefs.getBoolean("NightMode",false)
+        val isNightModeOn: Boolean = darkModePrefs.getBoolean("NightMode", false)
 
-        if (isNightModeOn){
+        if (isNightModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }else{
+           
+        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
 
@@ -104,8 +109,12 @@ class CreateNoteActivity : AppCompatActivity() {
 
         noteEditor()
 
-        createNoteBinding.tvDateTime.setText(SimpleDateFormat("EEEE, dd MMMMM yyyy HH:mm a",
-            Locale.getDefault()).format(Date()))
+        createNoteBinding.tvDateTime.setText(
+            SimpleDateFormat(
+                "EEEE, dd MMMMM yyyy HH:mm a",
+                Locale.getDefault()
+            ).format(Date())
+        )
 
 
 
@@ -113,7 +122,7 @@ class CreateNoteActivity : AppCompatActivity() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
 
-        if (intent.getBooleanExtra("isViewOrUpdate",false)){
+        if (intent.getBooleanExtra("isViewOrUpdate", false)) {
             alreadyAvailable = intent.getSerializableExtra("knote") as Note?
             viewOrUpdate()
         }
@@ -125,10 +134,10 @@ class CreateNoteActivity : AppCompatActivity() {
 
 
 
-    createNoteBinding.imgRemoveWeb.setOnClickListener {
-        createNoteBinding.tvUrl.text = null
-        createNoteBinding.linlayoutWeb.visibility = View.GONE
-    }
+        createNoteBinding.imgRemoveWeb.setOnClickListener {
+            createNoteBinding.tvUrl.text = null
+            createNoteBinding.linlayoutWeb.visibility = View.GONE
+        }
 
         createNoteBinding.imgRemoveImage.setOnClickListener {
             createNoteBinding.imgNote.setImageBitmap(null)
@@ -145,28 +154,36 @@ class CreateNoteActivity : AppCompatActivity() {
 
 
 
-                if (createNoteBinding.linlayoutWeb.visibility == View.VISIBLE){
-                    createNoteBinding.tvUrl.text = strurl
-                }
-
-            val note = Note(0,title,message,selectedImagePath,strurl,selectedColor,tvDateTime.text.toString())
-
-            if (alreadyAvailable != null){
-                    note.id = alreadyAvailable!!.id
+            if (createNoteBinding.linlayoutWeb.visibility == View.VISIBLE) {
+                createNoteBinding.tvUrl.text = strurl
             }
 
-            if (inputChecker(title,message)){
+            val note = Note(
+                0,
+                title,
+                message,
+                selectedImagePath,
+                strurl,
+                selectedColor,
+                tvDateTime.text.toString()
+            )
 
-              noteViewModel.addNote(note)
-              Intent().apply {
-                  setResult(Activity.RESULT_OK,this)
-                  finish()
-              }
-               Toasty.success(this,"Saved",Toast.LENGTH_SHORT,true).show()
+            if (alreadyAvailable != null) {
+                note.id = alreadyAvailable!!.id
+            }
 
-            }else{
+            if (inputChecker(title, message)) {
 
-                Toasty.error(this,"Enter details",Toast.LENGTH_SHORT,true).show()
+                noteViewModel.addNote(note)
+                Intent().apply {
+                    setResult(Activity.RESULT_OK, this)
+                    finish()
+                }
+                Toasty.success(this, "Saved", Toast.LENGTH_SHORT, true).show()
+
+            } else {
+
+                Toasty.error(this, "Enter details", Toast.LENGTH_SHORT, true).show()
 
             }
         }
@@ -174,291 +191,358 @@ class CreateNoteActivity : AppCompatActivity() {
 
     }
 
-    private fun viewOrUpdate(){
+    private fun viewOrUpdate() {
 
-    createNoteBinding.edTitle.setText(alreadyAvailable!!.noteTitle)
-    createNoteBinding.edNoteContent.setText(alreadyAvailable!!.noteContent)
+        createNoteBinding.edTitle.setText(alreadyAvailable!!.noteTitle)
+        createNoteBinding.edNoteContent.setText(alreadyAvailable!!.noteContent)
         createNoteBinding.tvUrl.text = alreadyAvailable!!.webLink
         createNoteBinding.tvDateTime.text = alreadyAvailable!!.dateTime
         createNoteBinding.edTitle.setTextColor(Color.parseColor(alreadyAvailable!!.color))
 
 
-        if (alreadyAvailable!!.noteImage.trim().isNotEmpty()){
-              createNoteBinding.imgNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailable!!.noteImage))
-               createNoteBinding.imgNote.visibility = View.VISIBLE
-               selectedImagePath = alreadyAvailable!!.noteImage
-               createNoteBinding.imgRemoveImage.visibility = View.VISIBLE
+        if (alreadyAvailable!!.noteImage.trim().isNotEmpty()) {
+            createNoteBinding.imgNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailable!!.noteImage))
+            createNoteBinding.imgNote.visibility = View.VISIBLE
+            selectedImagePath = alreadyAvailable!!.noteImage
+            createNoteBinding.imgRemoveImage.visibility = View.VISIBLE
         }
 
-        if (alreadyAvailable!!.webLink.trim().isNotEmpty()){
+        if (alreadyAvailable!!.webLink.trim().isNotEmpty()) {
             createNoteBinding.tvUrl.text = alreadyAvailable!!.webLink
             createNoteBinding.linlayoutWeb.visibility = View.VISIBLE
 
         }
 
 
-
-
-
-
     }
 
-   private fun inputChecker(title : String, noteContent : String):Boolean{
-       return !(TextUtils.isEmpty(title) && TextUtils.isEmpty(noteContent))
-   }
-
-
-
-   @SuppressLint("ResourceAsColor")
-   @RequiresApi(Build.VERSION_CODES.M)
-   private fun noteEditor(){
-        val cardLayout : CardView = findViewById(R.id.layoutEditTools)
-       val bottomSheetBehavior : BottomSheetBehavior<CardView> = BottomSheetBehavior.from(cardLayout)
-       cardLayout.findViewById<TextView>(R.id.tvEditTools).setOnClickListener {
-           if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED){
-               bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-           }else{
-               bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-           }
-       }
-
-      val imageColor =  cardLayout.findViewById<ImageView>(R.id.colorDefault)
-       val imageColor1 =  cardLayout.findViewById<ImageView>(R.id.colorBlue)
-       val imageColor2 =  cardLayout.findViewById<ImageView>(R.id.colorYellow)
-       val imageColor3 =  cardLayout.findViewById<ImageView>(R.id.colorGreen)
-       val imageColor4 =  cardLayout.findViewById<ImageView>(R.id.colorPink)
-
-       cardLayout.findViewById<View>(R.id.viewColor).setOnClickListener {
-           selectedColor = "#ef5059"
-          createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
-           imageColor.setImageResource(R.drawable.tintdone)
-           imageColor1.setImageResource(0)
-           imageColor2.setImageResource(0)
-           imageColor3.setImageResource(0)
-           imageColor4.setImageResource(0)
-           bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-
-       }
-
-       cardLayout.findViewById<View>(R.id.viewColor1).setOnClickListener {
-           selectedColor = "#2196F3"
-           createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
-           imageColor1.setImageResource(R.drawable.tintdone)
-           imageColor.setImageResource(0)
-           imageColor2.setImageResource(0)
-           imageColor3.setImageResource(0)
-           imageColor4.setImageResource(0)
-           bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-
-       }
-
-       cardLayout.findViewById<View>(R.id.viewColor2).setOnClickListener {
-           selectedColor = "#FFC107"
-           createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
-           imageColor2.setImageResource(R.drawable.tintdone)
-           imageColor1.setImageResource(0)
-           imageColor.setImageResource(0)
-           imageColor3.setImageResource(0)
-           imageColor4.setImageResource(0)
-           bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-
-       }
-
-       cardLayout.findViewById<View>(R.id.viewColor3).setOnClickListener {
-           selectedColor = "#4CAF50"
-           createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
-           imageColor3.setImageResource(R.drawable.tintdone)
-           imageColor1.setImageResource(0)
-           imageColor2.setImageResource(0)
-           imageColor.setImageResource(0)
-           imageColor4.setImageResource(0)
-
-           bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-       }
-
-       cardLayout.findViewById<View>(R.id.viewColor4).setOnClickListener {
-           selectedColor = "#E91E63"
-           createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
-           imageColor4.setImageResource(R.drawable.tintdone)
-           imageColor.setImageResource(0)
-           imageColor1.setImageResource(0)
-           imageColor3.setImageResource(0)
-           imageColor2.setImageResource(0)
-           bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-
-       }
-
-
-       if (alreadyAvailable != null && alreadyAvailable!!.color.trim().isNotEmpty()){
-
-           val sel = "#2196F3"
-           if (Color.parseColor(alreadyAvailable!!.color).toString() == sel){
-               cardLayout.findViewById<View>(R.id.viewColor1).performClick()
-           }
-
-
-       }
-
-
-       cardLayout.findViewById<ImageView>(R.id.imgInsert).setOnClickListener {
-
-           bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-           if (ActivityCompat.checkSelfPermission(
-                   this,android.Manifest.permission.READ_EXTERNAL_STORAGE
-               ) != PackageManager.PERMISSION_GRANTED){
-               ActivityCompat.requestPermissions(this@CreateNoteActivity,
-                   arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),REQUEST_IMAGE_CODE_PERMISSION
-               )
-           }else{
-               pickImage()
-           }
-
-
-
-
-       }
-
-       cardLayout.findViewById<ImageView>(R.id.imgLink).setOnClickListener {
-           bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-
-           val mDialogView = LayoutInflater.from(this).inflate(R.layout.layout_web, null)
-
-           val mBuilder = AlertDialog.Builder(this)
-               .setView(mDialogView)
-           val  mAlertDialog = mBuilder.show()
-
-           mDialogView.tvAddLink.setOnClickListener {
-               val url = mDialogView.findViewById<EditText>(R.id.edWeb)
-                      url.requestFocus()
-               if (url.text.toString().trim().isEmpty()){
-                   Toasty.warning(this,"Please enter url",Toast.LENGTH_SHORT,true).show()
-               }else if(!Patterns.WEB_URL.matcher(url.text.toString()).matches()){
-                   Toasty.warning(this,"Please enter  correct url",Toast.LENGTH_SHORT,true).show()
-               }else{
-                   strurl = url.text.toString()
-                   createNoteBinding.tvUrl.text = strurl
-                   createNoteBinding.linlayoutWeb.visibility = View.VISIBLE
-                   mAlertDialog.dismiss()
-               }
-
-
-
-
-
-           }
-           //cancel button click of custom layout
-           mDialogView.tvCancel.setOnClickListener {
-
-               mAlertDialog.dismiss()
-           }
-
-       }
-
-
-
+    private fun inputChecker(title: String, noteContent: String): Boolean {
+        return !(TextUtils.isEmpty(title) && TextUtils.isEmpty(noteContent))
     }
 
 
+    @SuppressLint("ResourceAsColor")
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun noteEditor() {
+        val cardLayout: CardView = findViewById(R.id.layoutEditTools)
+        val bottomSheetBehavior: BottomSheetBehavior<CardView> =
+            BottomSheetBehavior.from(cardLayout)
+        cardLayout.findViewById<TextView>(R.id.tvEditTools).setOnClickListener {
+            if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        val imageColor = cardLayout.findViewById<ImageView>(R.id.colorDefault)
+        val imageColor1 = cardLayout.findViewById<ImageView>(R.id.colorBlue)
+        val imageColor2 = cardLayout.findViewById<ImageView>(R.id.colorYellow)
+        val imageColor3 = cardLayout.findViewById<ImageView>(R.id.colorGreen)
+        val imageColor4 = cardLayout.findViewById<ImageView>(R.id.colorPink)
+
+        cardLayout.findViewById<View>(R.id.viewColor).setOnClickListener {
+            selectedColor = "#ef5059"
+            createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
+            imageColor.setImageResource(R.drawable.tintdone)
+            imageColor1.setImageResource(0)
+            imageColor2.setImageResource(0)
+            imageColor3.setImageResource(0)
+            imageColor4.setImageResource(0)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        }
+
+        cardLayout.findViewById<View>(R.id.viewColor1).setOnClickListener {
+            selectedColor = "#2196F3"
+            createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
+            imageColor1.setImageResource(R.drawable.tintdone)
+            imageColor.setImageResource(0)
+            imageColor2.setImageResource(0)
+            imageColor3.setImageResource(0)
+            imageColor4.setImageResource(0)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        }
+
+        cardLayout.findViewById<View>(R.id.viewColor2).setOnClickListener {
+            selectedColor = "#FFC107"
+            createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
+            imageColor2.setImageResource(R.drawable.tintdone)
+            imageColor1.setImageResource(0)
+            imageColor.setImageResource(0)
+            imageColor3.setImageResource(0)
+            imageColor4.setImageResource(0)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        }
+
+        cardLayout.findViewById<View>(R.id.viewColor3).setOnClickListener {
+            selectedColor = "#4CAF50"
+            createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
+            imageColor3.setImageResource(R.drawable.tintdone)
+            imageColor1.setImageResource(0)
+            imageColor2.setImageResource(0)
+            imageColor.setImageResource(0)
+            imageColor4.setImageResource(0)
+
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        cardLayout.findViewById<View>(R.id.viewColor4).setOnClickListener {
+            selectedColor = "#E91E63"
+            createNoteBinding.edTitle.setTextColor(Color.parseColor(selectedColor))
+            imageColor4.setImageResource(R.drawable.tintdone)
+            imageColor.setImageResource(0)
+            imageColor1.setImageResource(0)
+            imageColor3.setImageResource(0)
+            imageColor2.setImageResource(0)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        }
+
+
+        if (alreadyAvailable != null && alreadyAvailable!!.color.trim().isNotEmpty()) {
+
+            val sel = "#2196F3"
+            if (Color.parseColor(alreadyAvailable!!.color).toString() == sel) {
+                cardLayout.findViewById<View>(R.id.viewColor1).performClick()
+            }
+
+
+        }
+
+
+        cardLayout.findViewById<ImageView>(R.id.imgInsert).setOnClickListener {
+
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            if (ActivityCompat.checkSelfPermission(
+                    this, android.Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this@CreateNoteActivity,
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    REQUEST_IMAGE_CODE_PERMISSION
+                )
+            } else {
+                pickImage()
+            }
+
+
+        }
+
+        cardLayout.findViewById<ImageView>(R.id.imgSearch).setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            if (ActivityCompat.checkSelfPermission(
+                    this, android.Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this@CreateNoteActivity,
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    REQUEST_IMAGE_CODE_PERMISSION
+                )
+            } else {
+                pickImageSearch()
+            }
+
+        }
+
+
+        cardLayout.findViewById<ImageView>(R.id.imgLink).setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+            val mDialogView = LayoutInflater.from(this).inflate(R.layout.layout_web, null)
+
+            val mBuilder = AlertDialog.Builder(this)
+                .setView(mDialogView)
+            val mAlertDialog = mBuilder.show()
+
+            mDialogView.tvAddLink.setOnClickListener {
+                val url = mDialogView.findViewById<EditText>(R.id.edWeb)
+                url.requestFocus()
+                if (url.text.toString().trim().isEmpty()) {
+                    Toasty.warning(this, "Please enter url", Toast.LENGTH_SHORT, true).show()
+                } else if (!Patterns.WEB_URL.matcher(url.text.toString()).matches()) {
+                    Toasty.warning(this, "Please enter  correct url", Toast.LENGTH_SHORT, true)
+                        .show()
+                } else {
+                    strurl = url.text.toString()
+                    createNoteBinding.tvUrl.text = strurl
+                    createNoteBinding.linlayoutWeb.visibility = View.VISIBLE
+                    mAlertDialog.dismiss()
+                }
+
+
+            }
+            //cancel button click of custom layout
+            mDialogView.tvCancel.setOnClickListener {
+
+                mAlertDialog.dismiss()
+            }
+
+        }
+
+
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
 
     override fun onBackPressed() {
-       // super.onBackPressed()
+        // super.onBackPressed()
         onBackPressedDialog()
 
     }
 
-    fun pickImage(){
+    fun pickImage() {
 
         Intent(Intent.ACTION_GET_CONTENT).also {
             it.type = "image/*"
-            startActivityForResult(it,REQUEST_CODE_SELECT_IMAGE)
+            startActivityForResult(it, REQUEST_CODE_SELECT_IMAGE)
+        }
+    }
+
+    fun pickImageSearch() {
+
+        Intent(Intent.ACTION_GET_CONTENT).also {
+            it.type = "image/*"
+            startActivityForResult(it, REQUEST_CODE_SELECT_IMAGE_SEARCH)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_SELECT_IMAGE){
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_SELECT_IMAGE) {
 
-            if (data != null){
+            if (data != null) {
                 val imageuri = data.data
 
-                if (imageuri != null){
+
+                if (imageuri != null) {
 
                     try {
 
-                        val inputStream : InputStream? = contentResolver.openInputStream(imageuri)
-                        val bitmap : Bitmap? = BitmapFactory.decodeStream(inputStream)
-                         createNoteBinding.imgNote.setImageBitmap(bitmap)
+                        val inputStream: InputStream? = contentResolver.openInputStream(imageuri)
+                        val bitmap: Bitmap? = BitmapFactory.decodeStream(inputStream)
+                        createNoteBinding.imgNote.setImageBitmap(bitmap)
                         createNoteBinding.imgNote.visibility = View.VISIBLE
                         selectedImagePath = getImagePath(imageuri)
                         createNoteBinding.imgRemoveImage.visibility = View.VISIBLE
 
-                    }catch (exception : Exception){
-                         val message = exception.message.toString()
-                         Toasty.warning(this, message,Toast.LENGTH_SHORT,true).show()
+
+
+
+                    } catch (exception: Exception) {
+                        val message = exception.message.toString()
+                        Toasty.warning(this, message, Toast.LENGTH_SHORT, true).show()
+                    }
+                }
+            }
+
+
+        }else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_SELECT_IMAGE_SEARCH){
+            if (data != null){
+                val imageuri1 = data.data
+
+                if (imageuri1 != null) {
+
+                    try {
+
+                        //ocr
+                        val inputStream1: InputStream? = contentResolver.openInputStream(imageuri1)
+                        val bitmap1: Bitmap? = BitmapFactory.decodeStream(inputStream1)
+                        createNoteBinding.imgNoteSearch.setImageBitmap(bitmap1)
+                        imgTextExtract()
+
+                    } catch (exception: Exception) {
+                        val message = exception.message.toString()
+                        Toasty.warning(this, message, Toast.LENGTH_SHORT, true).show()
                     }
                 }
             }
 
 
         }
-    }
-
-    fun getImagePath(uri : Uri):String{
-
-        val filePath : String
-         val cursor : Cursor? = contentResolver
-             .query(uri,null,null,null,null)
-          if (cursor == null){
-              filePath = uri.path.toString()
-          }else{
-              cursor.moveToFirst()
-              val index = cursor.getColumnIndex("_data")
-              filePath = cursor.getString(index)
-              cursor.close()
-          }
-              return filePath
 
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    fun imgTextExtract() {
+        val bitmapDrawable = createNoteBinding.imgNoteSearch.drawable as BitmapDrawable
+        val bitmaptext = bitmapDrawable.bitmap
+        val recognizer = TextRecognizer.Builder(applicationContext).build()
 
-        if(requestCode == REQUEST_IMAGE_CODE_PERMISSION && grantResults.isNotEmpty()){
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    pickImage()
-                }else{
-                    Toasty.warning(this,"Permission denied",Toast.LENGTH_SHORT,true).show()
-                }
+        if (!recognizer.isOperational) {
+           Toasty.error(this,"Error ",Toast.LENGTH_SHORT,true).show()
+        } else {
+            val frame = Frame.Builder().setBitmap(bitmaptext).build()
+            val items = recognizer.detect(frame)
+            val sb = StringBuilder()
 
+            for (i in 0 until items.size()) {
+                val myItem = items.valueAt(i)
+                sb.append(myItem.value)
+                //sb.append("\n")
+
+            }
+            createNoteBinding.edNoteContent.setText(sb).toString()
         }
 
     }
 
-    fun onBackPressedDialog(){
-        val alert = AlertDialog.Builder(this)
-            .setTitle("Exit the note")
-            .setMessage("Do you want to exit the note?")
-            .setIcon(R.drawable.ic_warning)
-            .setPositiveButton("Yes"){_,_->
-                Intent().apply {
-                    setResult(Activity.RESULT_OK,this)
-                    finish()
-                }
-            }
-            .setNegativeButton("No"){_,_->
+        fun getImagePath(uri: Uri): String {
 
-            }.create()
-        alert.show()
+            val filePath: String
+            val cursor: Cursor? = contentResolver
+                .query(uri, null, null, null, null)
+            if (cursor == null) {
+                filePath = uri.path.toString()
+            } else {
+                cursor.moveToFirst()
+                val index = cursor.getColumnIndex("_data")
+                filePath = cursor.getString(index)
+                cursor.close()
+            }
+            return filePath
+
+        }
+
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+        ) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+            if (requestCode == REQUEST_IMAGE_CODE_PERMISSION && grantResults.isNotEmpty()) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickImage()
+                } else {
+                    Toasty.warning(this, "Permission denied", Toast.LENGTH_SHORT, true).show()
+                }
+
+            }
+
+        }
+
+        fun onBackPressedDialog() {
+            val alert = AlertDialog.Builder(this)
+                .setTitle("Exit the note")
+                .setMessage("Do you want to exit the note?")
+                .setIcon(R.drawable.ic_warning)
+                .setPositiveButton("Yes") { _, _ ->
+                    Intent().apply {
+                        setResult(Activity.RESULT_OK, this)
+                        finish()
+                    }
+                }
+                .setNegativeButton("No") { _, _ ->
+
+                }.create()
+            alert.show()
+
+        }
+
 
     }
-
-
-    
-}

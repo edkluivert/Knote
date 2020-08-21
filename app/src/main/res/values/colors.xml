@@ -25,4 +25,6 @@
     <color name="pink">#E91E63</color>
 
     <color name="mainActBak">#ffffff</color>
+
+    <color name="deleteColortint">#ffffff</color>
 </resources>
