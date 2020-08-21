@@ -2,7 +2,7 @@
 
 
 
-Knote is a standard note taking app with Mvvm architecture and some note editing features
+Knote is a standard note taking app with Mvvm architecture
 
 
 
@@ -11,7 +11,6 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 - Adding an image to note
 - Using google text to speech for quick note taking
 - Recording voice notes
-- Changing note title color(Lol)
 - Adding web links
 - Using OCR for quick note taking
 
@@ -31,17 +30,14 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 - Coroutines
 
 
-### Architecture 
-* Mvvm
 
-
-
+Intro slide one | Intro slide two | Intro slide three | empty list 
+--- | --- | --- | ---
 <img align="center" src="./screenshots/slideone.png" width="240"> | <img align="center" src="./screenshots/slidetwo.png" width="240"> | <img align="center" src="./screenshots/slidethree.png" width="240"> | <img align="center" src="./screenshots/mainemptyscreen.png" width="240">
 
 <h3 align="center">⚪⚫ Light and Dark themes</h3></br>
 
 <p align="center">
-
 <img align="center" src="./screenshots/notelistday.png" width="240"> 
 <img align="center" src="./screenshots/notelistnight.png" width="240"> 
 </p>
