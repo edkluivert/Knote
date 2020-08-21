@@ -2,7 +2,7 @@
 
 
 
-Knote is a standard note taking app with Mvvm architecture and some note editing features
+Knote is a standard note taking app with Mvvm architecture
 
 
 
@@ -11,14 +11,8 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 - Adding an image to note
 - Using google text to speech for quick note taking
 - Recording voice notes
-- Changing note title color(Lol)
 - Adding web links
 - Using OCR for quick note taking
-
-### Tools i will be using are
-
-1. Android studio
-2. Git
 
 ### Libraries and thirdparties
 
@@ -31,50 +25,21 @@ Knote is a standard note taking app with Mvvm architecture and some note editing
 - Coroutines
 
 
-### Architecture 
-* Mvvm
 
+Intro slide one | Intro slide two | Intro slide three | empty list 
+--- | --- | --- | ---
+<img align="center" src="./screenshots/slideone.png" width="240"> | <img align="center" src="./screenshots/slidetwo.png" width="240"> | <img align="center" src="./screenshots/slidethree.png" width="240"> | <img align="center" src="./screenshots/mainemptyscreen.png" width="240">
 
- 
- 
- 
- Here is a screenshot of the app so far
- 
- # Day mode
- 
- 
+<h3 align="center">⚪⚫ Light and Dark themes</h3></br>
 
- 
- 
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/slideone.png)
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/slidetwo.png)
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/slidethree.png)
+<p align="center">
+<img align="center" src="./screenshots/notelistday.png" width="240"> 
+<img align="center" src="./screenshots/notelistnight.png" width="240"> 
+</p>
  
  
  
  
- 
-  ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/mainemptyscreen.png)
- 
- 
-  
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/notelistday.png)
- 
- Note creation
- 
- ![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/editnoteday.png)
- 
- # Night mode
- 
- 
-![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/notelistnight.png)
-
-![alt text](https://github.com/Tristankluivert/Knote/blob/master/screenshots/editnotenight.png)
-
 
 
 ### Todos
