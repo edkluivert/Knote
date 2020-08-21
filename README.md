@@ -14,11 +14,6 @@ Knote is a standard note taking app with Mvvm architecture
 - Adding web links
 - Using OCR for quick note taking
 
-### Tools i will be using are
-
-1. Android studio
-2. Git
-
 ### Libraries and thirdparties
 
 - Room db
