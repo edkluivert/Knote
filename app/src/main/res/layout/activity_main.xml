@@ -33,7 +33,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No lists yet"
+            android:text="@string/no_lists_yet"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:textColor="@color/colorAccent"
@@ -63,7 +63,7 @@
         android:layout_height="@dimen/_40sdp"
         android:layout_marginEnd="@dimen/_30sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:src="@drawable/profilepic"
+        android:src="@drawable/kletter"
         android:contentDescription="@string/app_name"
         app:civ_border="false"
         app:civ_shadow_radius="2dp"

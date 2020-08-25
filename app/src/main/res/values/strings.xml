@@ -19,4 +19,5 @@
     <string name="cancel">Cancel</string>
     <string name="enterurl">Enter url</string>
     <string name="add_url">Add url</string>
+    <string name="no_lists_yet">No lists yet</string>
 </resources>

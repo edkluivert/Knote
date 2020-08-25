@@ -9,10 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.GradientDrawable
 import android.media.Image
@@ -20,6 +17,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.text.TextUtils
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -64,7 +62,7 @@ import java.util.jar.Manifest
 import java.util.regex.Pattern
 
 @InternalCoroutinesApi
-class CreateNoteActivity : AppCompatActivity() {
+class CreateNoteActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var createNoteBinding: ActivityCreateNoteBinding
 
@@ -76,6 +74,7 @@ class CreateNoteActivity : AppCompatActivity() {
     private var REQUEST_CODE_SELECT_IMAGE_SEARCH = 3
     private var selectedImagePath: String = ""
     private var strurl: String = ""
+    private var tts: TextToSpeech? = null
 
     private val noteViewModel by inject<NoteViewModel>()
 
@@ -90,7 +89,7 @@ class CreateNoteActivity : AppCompatActivity() {
         val createview = createNoteBinding.root
         setContentView(createview)
 
-
+        tts = TextToSpeech(this, this)
         val darkModePrefs = getSharedPreferences(getString(R.string.app_name), 0)
         val editor = darkModePrefs.edit()
         val isNightModeOn: Boolean = darkModePrefs.getBoolean("NightMode", false)
@@ -98,7 +97,7 @@ class CreateNoteActivity : AppCompatActivity() {
         if (isNightModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-           
+
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
@@ -309,6 +308,12 @@ class CreateNoteActivity : AppCompatActivity() {
                 cardLayout.findViewById<View>(R.id.viewColor1).performClick()
             }
 
+
+        }
+
+        cardLayout.findViewById<ImageView>(R.id.imgTextSpeech).setOnClickListener {
+            cardLayout.findViewById<ImageView>(R.id.imgTextSpeech).setImageResource(R.drawable.redmicro)
+            speakOut()
 
         }
 
@@ -526,7 +531,7 @@ class CreateNoteActivity : AppCompatActivity() {
 
         }
 
-        fun onBackPressedDialog() {
+        private fun onBackPressedDialog() {
             val alert = AlertDialog.Builder(this)
                 .setTitle("Exit the note")
                 .setMessage("Do you want to exit the note?")
@@ -544,5 +549,44 @@ class CreateNoteActivity : AppCompatActivity() {
 
         }
 
+    override fun onInit(status: Int) {
+
+        if (status == TextToSpeech.SUCCESS) {
+
+            val result = tts!!.setLanguage(Locale.US)
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+
+            } else {
+                val cardLayout: CardView = findViewById(R.id.layoutEditTools)
+                val bottomSheetBehavior: BottomSheetBehavior<CardView> =
+                    BottomSheetBehavior.from(cardLayout)
+                cardLayout.findViewById<ImageView>(R.id.imgTextSpeech).isEnabled = true
+            }
+
+        } else {
+
+        }
+
 
     }
+
+    private fun speakOut() {
+        val text = createNoteBinding.edNoteContent.text.toString()
+        if (text.isEmpty()){
+            Toasty.error(this,"No texts", Toast.LENGTH_SHORT,true).show()
+        }
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null,"")
+    }
+
+    public override fun onDestroy() {
+
+        if (tts != null) {
+            tts!!.stop()
+            tts!!.shutdown()
+        }
+        super.onDestroy()
+    }
+
+
+}
