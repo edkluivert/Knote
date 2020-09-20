@@ -9,7 +9,7 @@ Knote is a standard note taking app with Mvvm architecture
 ### Features 
 
 - Adding an image to note
-- Using google text to speech for quick note taking
+- Using google text to speech for quick note reading
 - Recording voice notes
 - Adding web links
 - Using OCR for quick note taking
